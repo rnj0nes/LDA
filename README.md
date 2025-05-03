@@ -1,3 +1,4 @@
+![](https://github.com/rnj0nes/LDA/blob/main/Figures/logo-lvmworkshop-footer-2024-01-22.png)
 # Latent Variable Methods Workshop - Longitudinal Data Analysis
 
 Code, data, and slides used in LVM Workshop Longitudinal Data Analysis (LDA) course.
