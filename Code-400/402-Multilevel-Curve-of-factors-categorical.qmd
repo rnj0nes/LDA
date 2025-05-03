@@ -1,0 +1,742 @@
+---
+title: "Multilevel Approaches to Modeling Growth and Change in Latent Variables, Part II: Categorical Indicators"
+title-slide-attributes:
+  data-background-image: ../Figures/lvmworkshop2012swirlbw.png
+  data-background-size: contain
+  data-background-opacity: "1"
+author: "Rich Jones"
+date: 2024-02-25
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    logo: ../Figures/logo-lvmworkshop-footer-2024-01-22.png
+    self-contained: true
+editor: source
+---
+
+## Multilevel Curve of Factors with categorical indicators
+
+::: {style="font-size:0.8em;"}
+This is the second part of a lecture on multilevel approaches to modeling growth. This is a useful strategy when there are a lot of repeated observations. 
+
+This lecture builds on part 1 by treating the observed variables as categorical, rather than continuous.
+
+I will run the following models:<br>
+1. Continuous variable CFA [(model21, CFA Continuous)](#CFAContinuous)<br>
+2. Categorical variable CFA [(model22, CFA Categorical)](#CFACategorical)<br>
+3. Categorical variable CFA with covariates[(model23, CFA Categorical)](#CFACategoricalwithCovariates)<br>
+4. Multiple indicator latent growth curve model [(model24, MILGCM)](#MILGCM)<br>
+5. Multilevel curve of factors [(model25, MLCOF)](#MLCOF)
+:::
+
+<!-- Libraries -->
+
+<!-- Here are libraries that important for compiling the -->
+
+<!-- QMD, but are not part of the didactic content -->
+
+```{r}
+#| label: QMDlibraries
+#| echo: false
+#| output: false 
+#| warning: false 
+#| message: false
+library(kableExtra)
+library(ggplot2)
+library(dplyr)
+library(purrr)
+library(haven)
+library(stringr)
+library(tidyverse)
+library(stringr)
+library(devtools)
+library(MplusAutomation)
+```
+
+---
+
+### Data
+
+As in the previous example: this example uses data that are Centers for Epidemiologic Studies - Depression (CESD) scale responses collected from the New Haven Site of the EPESE (Established Populations for the Epidemiologic Study of the Elderly) study. In this lecture, the four-category responses of six CESD questions will be treated as categorical  indicators of a common underlying trait.
+
+These data are public and can be obtained from ICPSR.
+
+
+<!-- Print the resulting html with pagedown::chrome_print -->
+<!-- pagedown::chrome_print("Penalized-DIF-Multiple-Groups.html") -->
+<!-- This won't allow for scrollable fields tho. -->
+
+<!-- Mplus engine -->
+<!-- Users may need to replace "/Applications/Mplus/mplus" with the -->
+<!-- path to their own Mplus executable -->
+
+```{r}
+#| label: MplusEngine
+#| echo: false
+#| output: false
+knitr::knit_engines$set(mplus = function(options) {
+    code <- paste(options$code, collapse = "\n")
+    fileConn<-file("formplus.inp")
+    writeLines(code, fileConn)
+    close(fileConn)
+    out  <- system2("/Applications/Mplus/mplus", "formplus.inp")
+    fileConnOutput <- file("formplus.out")
+    mplusOutput <- readLines(fileConnOutput)
+    knitr::engine_output(options, code, mplusOutput)
+})
+```
+
+<!-- The QMD inserts copies of INP files, but I want to make sure those files exist -->
+<!-- before I run the QMD the first time. -->
+
+```{r}
+#| label: messup
+#| echo: false
+#| output: false
+file_names <- c("402-model21.inp","402-model22.inp","402-model23step1.inp","402-model23step2.inp","402-model23step3.inp","402-model24.inp","402-model25.inp")
+
+# Loop over each file name
+for (file_name in file_names) {
+  # Check if the file exists
+  if (!file.exists(file_name)) {
+    # File does not exist, create the file and write "rerun QMD" on the first line
+    writeLines("rerun QMD", file_name)
+  }
+  # If the file exists, do nothing and move to the next file name
+}
+```
+
+<!-- showme function -->
+
+<!-- I use the showme function to display INP files -->
+
+```{r}
+#| label: showmefunction
+#| echo: false
+#| output: false
+showme <- function(x) {
+   # Replace 'path/to/your/file.txt' with the path to your text file
+   file_path <- x
+   # Read the contents of the file
+   file_contents <- readLines(file_path)
+   # Print the contents to the console
+   cat(file_contents, sep = "\n")
+}
+# showme("/Users/rnj/Library/CloudStorage/Dropbox/My Mac (BMH2C02DM1TSMD6T)/Downloads/genmem_metric.out")
+```
+
+
+<!-- readSvalues function thanks ChatGPT -->
+```{r}
+#| label: readSvaluesfunction
+#| echo: false 
+#| output: false 
+readSvalues <- function(filename) {
+  # Read the file lines into a vector
+  lines <- readLines(filename)
+  
+  # Initialize an empty vector to store the lines of interest
+  lines_of_interest <- character(0)
+  
+  # Flag to keep track of whether the starting line has been found
+  found_start <- FALSE
+  # Counter for blank lines
+  blank_line_count <- 0
+  
+  # Loop through each line in the file
+  for (line in lines) {
+    # Check for the starting line
+    if (grepl("MODEL COMMAND WITH FINAL ESTIMATES USED AS STARTING VALUES", line)) {
+      found_start <- TRUE
+      next
+    }
+    
+    # If the starting line has been found, process the lines until 3 blank lines are encountered
+    if (found_start) {
+      if (nchar(trimws(line)) == 0) { # Check for a blank line
+        blank_line_count <- blank_line_count + 1
+        if (blank_line_count == 3) {
+          break
+        }
+      } else {
+        blank_line_count <- 0 # Reset blank line counter if a non-blank line is found
+        lines_of_interest <- c(lines_of_interest, line) # Add the line to the vector
+      }
+    }
+  }
+  
+  # Remove blank lines from the lines of interest
+  lines_of_interest <- lines_of_interest[nchar(trimws(lines_of_interest)) > 0]
+  
+  # Return the character vector
+  return(lines_of_interest)
+}
+
+# Use the function to read the file and save the output
+# svalues <- readSvalues("prelim2.out")
+```
+
+
+<!-- itemsummary thanks ChatGPT -->
+```{r}
+#| label: itemsummary function
+#| echo: false
+#| output: false
+
+# Load necessary packages
+if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")
+if (!requireNamespace("tidyr", quietly = TRUE)) install.packages("tidyr")
+
+library(dplyr)
+library(tidyr)
+
+# Define the function
+itemsummary <- function(data, vars) {
+  # Melt the data frame to long format with variable-value pairs
+  long_data <- pivot_longer(data, cols = all_of(vars), values_to = "Values", names_to = "Variable")
+  
+  # Replace actual NA with a character "NA" for counting
+  long_data$Values <- replace_na(as.character(long_data$Values), "NA")
+  
+  # Count occurrences of each value for each variable
+  frequency_data <- long_data %>%
+    group_by(Variable, Values) %>%
+    summarise(Frequency = n(), .groups = 'drop')
+  
+  # Spread the frequency data to wide format
+  wide_frequency_data <- pivot_wider(frequency_data, names_from = Values, values_from = Frequency, values_fill = list(Frequency = 0))
+  
+  return(wide_frequency_data)
+}
+
+# Example usage
+# Assuming 'df' is your data frame and you have variables 'var1', 'var2', 'var3', etc.
+# consolidated_table <- createConsolidatedFrequencyTable(df, c("var1", "var2", "var3"))
+# print(consolidated_table)
+
+
+```
+
+
+
+
+
+
+<!-- Prepare data -->
+<!-- Data are prepared in Multilevel-Curve-of-factors.qmd -->
+<!-- df.csv is a "long" (multiple record) data set -->
+<!-- df <- read.csv("df.csv", row.names = 1) -->
+<!-- > psych::describe(df, type = 3, skew = FALSE, ranges = TRUE, na.rm = TRUE) -->
+<!--         vars    n    mean     sd   min     max   range    se -->
+<!-- id         1 6165 1391.95 811.09  1.00 2812.00 2811.00 10.33 -->
+<!-- sad        2 6119    1.47   0.75  1.00    4.00    3.00  0.01 -->
+<!-- blues      3 6109    1.35   0.74  1.00    4.00    3.00  0.01 -->
+<!-- depress    4 6130    1.52   0.82  1.00    4.00    3.00  0.01 -->
+<!-- happy      5 6071    1.70   1.00  1.00    4.00    3.00  0.01 -->
+<!-- enjoy      6 6063    1.54   0.94  1.00    4.00    3.00  0.01 -->
+<!-- hopeful    7 5693    1.94   1.19  1.00    4.00    3.00  0.02 -->
+<!-- t          8 6165    2.36   2.38  0.00    6.00    6.00  0.03 -->
+<!-- td         9 6165    0.24   0.24  0.00    0.60    0.60  0.00 -->
+<!-- sex       10 6165    1.60   0.49  1.00    2.00    1.00  0.01 -->
+<!-- age       11 6165    2.20   1.24  1.00    5.00    4.00  0.02 -->
+<!-- ymean     12 6165    1.59   0.64  1.00    4.00    3.00  0.01 -->
+<!-- yz        13 6165    0.03   1.01 -0.91    3.87    4.77  0.01 -->
+<!-- female    14 6165    0.60   0.49  0.00    1.00    1.00  0.01 -->
+<!-- agec70    15 6165    0.30   0.62 -0.30    1.70    2.00  0.01 -->
+
+```{r}
+#| label: prepare data
+#| echo: false 
+#| output: false
+#| warning: false
+df <- read.csv("df.csv", row.names = 1)
+```
+
+---
+
+#### Descriptives
+
+::: {style="font-size:0.5em;"}
+
+```{r}
+#| label: descriptives
+#| echo: true
+kable(
+   psych::describe(df, type = 3, skew = FALSE, ranges = TRUE, na.rm = TRUE)
+   , format = "html", digits = 2)
+```
+::: 
+
+---
+
+#### itemsummary
+
+::: {style="font-size:0.5em;"}
+```{r}
+#| label: itemsummary
+#| echo: true
+kable(itemsummary(df, c("sad","blues","depress","happy","enjoy","hopeful")))
+```
+Note: CES-D items are asked with a past week look-back, and response categories have the labels: rarely or none of the time (less than 1 day); some or a little of the time (1-2 days); occasionally or a moderate amount of time (3-4 days); and most or all of the time (5-7 days). Category labels are reversed for positive items (*enjoy*, *happy*,  *hopeful*).
+:::
+
+
+# Continuous variable CFA
+
+---
+
+## Use MplusAutomation to prepare data set for Mplus
+
+```{r}
+#| label: l279_mplusautomation
+#| echo: true
+cesditems <- df[df$t == 0, c("sad", "blues", "depress", "happy", "enjoy", "hopeful", "agec70","female")]
+MplusAutomation::prepareMplusData(cesditems,"cesditems.dat")
+```
+
+---
+
+## Mplus ordinary CFA model, continuous items {#CFAContinuous}
+
+```{r}
+#| label: l372_showme_model1
+showme("402-model21.inp")
+```
+
+
+# Continuous item CFA of CESD at baseline
+
+```{mplus}
+TITLE:    Continuous item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful; 
+          MISSING = . ;
+MODEL:    f by sad@1 blues-hopeful*;
+OUTPUT:   STDYX  ;
+```
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput390
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model21.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model21.inp", overwrite = TRUE)
+```
+
+
+
+# Categorical item CFA of CESD at baseline {#CFACategorical}
+
+```{r}
+#| label: l404_showme_model1
+showme("402-model22.inp")
+```
+
+------------------------------------------------------------------------
+
+```{mplus}
+TITLE:    Categorical item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful; 
+          CATEGORICAL are all ;
+          MISSING = . ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f by sad@1.24328 blues-hopeful*; 
+          f*1;
+OUTPUT:   TECH1 ; !SVALUES ;
+```
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput423
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model22.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model22.inp", overwrite = TRUE)
+```
+
+# Categorical item CFA of CESD at baseline WITH COVARIATES {#CFACategoricalwithCovariates}
+
+------------------------------------------------------------------------
+
+::: {style="font-size:0.5em;"}
+**Step 1.** Note the identification constraint and the OUTPUT options.
+::: 
+
+```{r}
+#| label: l396_showme_model1
+showme("402-model23step1.inp")
+```
+
+------------------------------------------------------------------------
+
+```{mplus}
+TITLE:    Categorical item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful
+                  agec70 female; 
+          CATEGORICAL are sad-hopeful ;
+          MISSING = . ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f by sad-hopeful*; 
+          f@1;
+          f on agec70 female ;
+OUTPUT:   STDYX; TECH1 ; TECH4; !SVALUES ;
+```
+
+::: {style="font-size:0.5em;"}
+**Notice:**<br>
+Note the r-squared for latent factor `f`.<br>
+Note the variance for the latent factor `f` in TECH4.
+:::
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput430
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model23step1.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model23step1.inp", overwrite = TRUE)
+```
+
+------------------------------------------------------------------------
+
+::: {style="font-size:0.5em;"}
+**Step 2.** Note the identification constraint and OUTPUT options.
+::: 
+
+```{r}
+#| label: l443_showme_model1
+showme("402-model23step2.inp")
+```
+
+------------------------------------------------------------------------
+
+```{mplus}
+TITLE:    Categorical item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful
+                  agec70 female; 
+          CATEGORICAL are sad-hopeful ;
+          MISSING = . ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f by sad-hopeful*; 
+          f@0.968; ! 0.968 = 1 - .032
+          f on agec70 female ;
+OUTPUT:   STDYX; TECH1 ; TECH4; SVALUES ;
+```
+
+::: {style="font-size:0.5em;"}
+**Notice:**<br>
+Note the variance for the latent factor `f` in TECH4.<br>
+Note the unstandardized factor loading for `sad`, in MODEL RESULTS and in STARTING VALUES.
+:::
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput475
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model23step2.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model23step2.inp", overwrite = TRUE)
+```
+
+------------------------------------------------------------------------
+
+::: {style="font-size:0.5em;"}
+**Step 3.** Final baseline parameterization (and check variance of `f`).
+::: 
+
+```{r}
+#| label: l489_showme_model1
+showme("402-model23step3.inp")
+```
+
+------------------------------------------------------------------------
+
+```{mplus}
+TITLE:    Categorical item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful
+                  agec70 female; 
+          CATEGORICAL are sad-hopeful ;
+          MISSING = . ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f BY sad@1.24246; ! now fixed
+          f by blues-hopeful*; 
+          f* ; ! now estimated
+          f on agec70 female ;
+OUTPUT:   TECH4;
+```
+
+::: {style="font-size:0.5em;"}
+**Notice:**<br>
+Note the variance for the latent factor `f` in TECH4.<br>
+:::
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput520
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model23step3.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model23step3.inp", overwrite = TRUE)
+```
+
+# Mplus Multiple Indicator LGC model, categorical items
+
+<!-- Data set up in multilevel-Curve-of-factors.qmd -->
+<!-- DATA:     FILE = "cesdwide.dat"; -->
+<!-- VARIABLE: NAMES = id female agec70  -->
+<!--           y01 y02 y03 y04 y05 y06  -->
+<!--           y31 y32 y33 y34 y35 y36  -->
+<!--           y61 y62 y63 y64 y65 y66;  -->
+<!--           IDVARIABLE = id ; -->
+
+---
+
+## MILGCM {#MILGCM}
+
+```{r}
+#| label: l544_showme_model1
+showme("402-model24.inp")
+```
+
+::: {style="font-size:0.5em;"}
+**Note:**  Data set up in "Multilevel Curve of Factors" presentation.
+:::
+
+
+---
+
+::: {style="font-size:0.5em;"}
+Note in this model we have:
+:::
+
+```
+MODEL:    f0 by u01@1.281 u02-u06* (l1-l6); ! = 1.24246*sqrt(1.063)
+          f3 by u31@1.281 u32-u36* (l1-l6); ! where 1.063 is estimate in TECH4
+          f6 by u61@1.281 u62-u66* (l1-l6); ! of VAR(F0) when l1 = 1.24246
+```
+
+::: {style="font-size:0.5em;"}
+On the first run of this mode, the variance of `f0` was 1.063 in the TECH4
+output. It should be exected that the constraint on `u01` or `sad` derived 
+from the one time point model would not perfectly produce a 1.0 variance in 
+the longitudinal model. The longitudinal model we have forces equal residual
+variance on the time-specific latent traits (`f0`, `f3`, and `f6`) and these
+will come out as a weighted average. It is not reasonable to assume this
+parameter would be the same as the model that only included f1. Also, 
+the `f3` and `f6` factors are predicted by latent variable `S`, but 
+`f0` is not. 
+
+The implication of this is we could probably have skipped the three step
+procedure using the baseline model to get a latent variable variance of 1 
+in the MILGCM and just run two MILGM models (as was done here).
+
+You will see in this model, the TECH4 variance estimate for `f0` is 1.0.
+:::
+------------------------------------------------------------------------
+
+```{mplus}
+TITLE:    Categorical item multiple indicator LGCM of CESD
+DATA:     FILE = "cesdwide.dat";
+VARIABLE: NAMES = id female agec70 
+          u01 u02 u03 u04 u05 u06 
+          u31 u32 u33 u34 u35 u36 
+          u61 u62 u63 u64 u65 u66; 
+          IDVARIABLE = id ;
+          MISSING = . ;
+          CATEGORICAL are u01-u66 ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f0 by u01@1.281 u02-u06* (l1-l6); ! = 1.24246*sqrt(1.063)
+          f3 by u31@1.281 u32-u36* (l1-l6); ! where 1.063 is estimate
+          f6 by u61@1.281 u62-u66* (l1-l6); ! of VAR(F0) when l1 = 1.24246
+          f0 f3 f6 (psi) ; ! for comparability with MLGOF
+          ! Also no item-level resid covar for comparability with MLGOF
+          [u01$1 u31$1 u61$1] (t11) ;
+          [u01$2 u31$2 u61$2] (t12) ;
+          [u01$3 u31$3 u61$3] (t13) ;                  
+          [u02$1 u32$1 u62$1] (t21) ;
+          [u02$2 u32$2 u62$2] (t22) ;
+          [u02$3 u32$3 u62$3] (t23) ;                  
+          [u03$1 u33$1 u63$1] (t31) ;
+          [u03$2 u33$2 u63$2] (t32) ;
+          [u03$3 u33$3 u63$3] (t33) ;                  
+          [u04$1 u34$1 u64$1] (t41) ;
+          [u04$2 u34$2 u64$2] (t42) ;
+          [u04$3 u34$3 u64$3] (t43) ;                  
+          [u05$1 u35$1 u65$1] (t51) ;
+          [u05$2 u35$2 u65$2] (t52) ;
+          [u05$3 u35$3 u65$3] (t53) ;                  
+          [u06$1 u36$1 u66$1] (t61) ;
+          [u06$2 u36$2 u66$2] (t62) ;
+          [u06$3 u36$3 u66$3] (t63) ;
+          i by f0@1 f3@1 f6@1 ;
+          i* ;
+          [i@0] ;
+          s by f0@0 f3@0.3 f6@0.6 ;
+          s* ;
+          [s*] ;
+          i with s ;
+          i s on female agec70 ;
+OUTPUT: TECH4;
+```
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput601
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model24.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model24.inp", overwrite = TRUE)
+```
+
+
+---
+
+# Mplus Multilevel Growth of Factors, categorical items
+
+
+## MLCOF {#MLGOF}
+
+```{r}
+#| label: l629_showme_model1
+showme("402-model25.inp")
+```
+
+------------------------------------------------------------------------
+
+::: {style="font-size:0.5em;"}
+Note: The scale for `fw` :
+:::
+```
+MODEL:    %WITHIN%
+          fw by sad@1.281 blues-hopeful*; 
+```
+
+::: {style="font-size:0.5em;"}
+
+Was borrowed from the MILGM model. It was not possible to run TECH4 in `model25.inp`, the MLCOF model. Mplus says:
+
+:::
+
+```
+*** WARNING in OUTPUT command
+  TECH4 option is only available for TYPE=TWOLEVEL RANDOM with ESTIMATOR=BAYES.
+  Request for TECH4 is ignored.
+```
+
+::: {style="font-size:0.5em;"}
+Switching to `ESTIMATOR=BAYES` is therefore an option, but even `tho I am using 
+one of three common scale parameterizations (MLR/PROBIT) and the parameter estimates
+will be on the same scale in MLR/PROBIT and BAYES, they might not be equal 
+enough to guarantee a variance of 1 at the first time point. But it is an option.
+
+Also, if I have a follow-up model to run that includes sampling weights, that 
+cannot be accommodated by `ESTIMATOR=BAYES`. 
+
+Therefore I also can't confirm the variance of `fw` is 1.0 at baseline
+without calculating the variance "by hand" or moving to a Bayes estimator.
+
+:::
+
+
+
+---
+
+```{mplus}
+TITLE:    Categorical item multilevel growth of factors ;
+DATA:     FILE = cesdlongk.dat ;
+          VARIANCES = NOCHECK ;
+VARIABLE: NAMES = id td female agec70 sad blues depress happy enjoy hopeful k ; 
+          CATEGORICAL are sad blues depress happy enjoy hopeful ;
+          MISSING = . ;
+          WITHIN = td k ;
+          BETWEEN = agec70 female ; 
+          CLUSTER = id ;
+ANALYSIS: TYPE = TWOLEVEL RANDOM ;
+          ESTIMATOR = MLR ; 
+          LINK = PROBIT ;
+MODEL:    %WITHIN%
+          fw by sad@1.281 blues-hopeful*; 
+          s | fw on td ;
+          i | fw on k ;
+          %BETWEEN%
+          !sad-hopeful@0 ; ! This would be included in continuous variable case
+          [i@0] ;
+          i with s ;
+          i s on female agec70 ;
+```
+
+---
+
+## Save output from Mplus Engine
+
+```{r}
+#| label: saveoutput662
+#| echo: True
+#| output: false
+file.copy("formplus.out", "402-model25.out", overwrite = TRUE)
+file.copy("formplus.inp", "402-model25.inp", overwrite = TRUE)
+```
+
+
+
+## Summary
+
+::: {style="font-size:0.6em;"}
+The multiple indicator latent growth curve model (MILGCM) and multilevel growth of factors (MLGOF) models for categorical variables are equivalent, with some constraints (no item level residual covariances in MILGCM; equal residual variances for time-specific common factors in MIGCM).
+
+
+```{r}
+#| label: l41_process_output
+#| echo: false
+milgmResults <- MplusAutomation::readModels(target="402-model24.out")
+milgmParameters <-  milgmResults$parameters$unstandardized %>% mutate(PARAMETER = str_c(paramHeader,param, sep = " "))
+mlcofResults <- MplusAutomation::readModels(target="402-model25.out")
+mlcofParameters <-  mlcofResults$parameters$unstandardized %>% mutate(PARAMETER = str_c(paramHeader,param, sep = " "))
+# Elapsed time
+timePattern <- "\\d{2}:\\d{2}:\\d{2}"
+milgmElapsedTime <- regmatches(grep("Elapsed Time:", milgmResults$output, value = TRUE), regexpr(timePattern, grep("Elapsed Time:", milgmResults$output, value = TRUE)))
+mlcofElapsedTime <- regmatches(grep("Elapsed Time:", mlcofResults$output, value = TRUE), regexpr(timePattern, grep("Elapsed Time:", mlcofResults$output, value = TRUE)))
+
+```
+
+
+| **Parameter** | **MILGCM** | **MLCOF** | 
+|:--|--:|--:|
+|Number of free parameters | `r milgmResults$summaries$Parameters`                          | `r mlcofResults$summaries$Parameters`         |
+|Loglikelihood             | `r sprintf("%.3f", milgmResults$summaries$LL)`                 | `r sprintf("%.3f", mlcofResults$summaries$LL)` |
+|Correction factor         | `r sprintf("%.3f", milgmResults$summaries$LLCorrectionFactor)` | `r sprintf("%.3f", mlcofResults$summaries$LLCorrectionFactor)` |
+|I with S                  | `r milgmParameters$est[milgmParameters$PARAMETER == "I.WITH S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "I.WITH S"]`|
+|Intercept(I)              |@0|@0|
+|Intercept(S)              |`r milgmParameters$est[milgmParameters$PARAMETER == "Intercepts S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Intercepts S"]`|
+|ResVar(I)                 |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances I"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances I"]`|
+|ResVar(S)                 |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances S"]`|
+|ResVar(F0), ResVar(FW)    |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances F0"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances FW"]`|
+|Elapsed Time              |`r milgmElapsedTime`|`r mlcofElapsedTime`|
+:::
+
+
+---
+
+

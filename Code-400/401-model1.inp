@@ -1,0 +1,8 @@
+TITLE:    LGCM CESD score
+DATA:     FILE = cesd.dat ;
+VARIABLE: NAMES = id female agec70 yz0 yz3 yz6; 
+          IDVARIABLE = id ;
+          MISSING = . ;
+MODEL:    i s | yz0@0 yz3@0.3 yz6@0.6 ; ! 10 year units
+          yz0-yz6 (e) ;
+          i s on agec70 female ;

@@ -1,0 +1,56 @@
+TITLE:    LGCM CESD score
+DATA:     FILE = "cesdwide.dat";
+VARIABLE: NAMES = id female agec70 
+          y01 y02 y03 y04 y05 y06 
+          y31 y32 y33 y34 y35 y36 
+          y61 y62 y63 y64 y65 y66; 
+          IDVARIABLE = id ;
+          MISSING = . ;
+MODEL:    fw0 BY y01@0.51150 (l1);
+          fw3 BY y31@0.51150 (l1);
+          fw6 BY y61@0.51150 (l1);
+          fw0 by y02-y06* (l2-l6);
+          fw3 by y32-y36* (l2-l6);
+          fw6 by y62-y66* (l2-l6);
+          [y01@1.35775];
+          [y31@1.35775];
+          [y61@1.35775];
+          [y02-y06*] (nu2-nu6) ;
+          [y32-y36*] (nu2-nu6) ;
+          [y62-y66*] (nu2-nu6) ;
+          y01 y31 y61 (te1) ;
+          y02 y32 y62 (te2) ;
+          y03 y33 y63 (te3) ;
+          y04 y34 y64 (te4) ;
+          y05 y35 y65 (te5) ;
+          y06 y36 y66 (te6) ;
+          ! y01 with y31 (te11) ; 
+          ! y31 with y61 (te11) ;
+          ! y02 with y32 (te22) ; 
+          ! y32 with y62 (te22) ;
+          ! y03 with y33 (te33) ; 
+          ! y33 with y63 (te33) ;
+          ! y04 with y34 (te44) ; 
+          ! y34 with y64 (te44) ;
+          ! y05 with y35 (te55) ; 
+          ! y35 with y65 (te55) ;
+          ! y06 with y36 (te66) ; 
+          ! y36 with y66 (te66) ;
+          ! y01 with y61  ; 
+          ! y02 with y62  ; 
+          ! y03 with y63  ; 
+          ! y04 with y64  ; 
+          ! y05 with y65  ; 
+          ! y06 with y66  ; 
+          [fw0@0] ;
+          [fw3@0] ;
+          [fw6@0] ;
+          fw0* (psi1) ;
+          fw3* (psi1) ;
+          fw6* (psi1) ;
+          i by fw0-fw6@1 ;
+          s by fw0@0 fw3@0.3 fw6@0.6 ; ! per decade 
+          i with s ;
+          i s on agec70 female ;
+          [i*] ;
+          [s*] ;

@@ -1,0 +1,344 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/03/2025   1:19 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    Categorical item multilevel growth of factors ;
+  DATA:     FILE = cesdlongk.dat ;
+            VARIANCES = NOCHECK ;
+  VARIABLE: NAMES = id td female agec70 sad blues depress happy enjoy hopeful k ;
+            CATEGORICAL are sad blues depress happy enjoy hopeful ;
+            MISSING = . ;
+            WITHIN = td k ;
+            BETWEEN = agec70 female ;
+            CLUSTER = id ;
+  ANALYSIS: TYPE = TWOLEVEL RANDOM ;
+            ESTIMATOR = MLR ;
+            LINK = PROBIT ;
+  MODEL:    %WITHIN%
+            fw by sad@1.281 blues-hopeful*;
+            s | fw on td ;
+            i | fw on k ;
+            %BETWEEN%
+            !sad-hopeful@0 ; ! This would be included in continuous variable case
+            [i@0] ;
+            i with s ;
+            i s on female agec70 ;
+
+
+
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  SAD
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  BLUES
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  DEPRESS
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  HAPPY
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  ENJOY
+*** WARNING in MODEL command
+  A y-variable has been declared on the within level but not referred to on
+  the between level.  Please check that this is what is intended.  If this is not intended,
+  specify the variable as a within variable.  Problem with:  HOPEFUL
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      SAD         154 319 484 815 1046 1528 1791 2164 2451 557 98
+      BLUES       687 793 1071 1618 1669 2096 2104 2369 557 2205
+      DEPRESS     154 2369
+      HAPPY       154 319 484 605 815 1012 1046 1528 1786 1849 2549 557 98
+      ENJOY       154 223 319 484 1046 1528 1741 2164 2451 2528 2557 557 886 98
+      HOPEFUL     29 67 143 154 239 341 360 373 448 510 553 605 687 707 933 938 979 1046 1115
+                  1191 1282 1381 1406 1417 1479 1667 1687 1742 1756 1762 1764 1786 1809 1878 1895
+                  1956 1987 2012 2096 2266 2292 2369 2375 2404 2428 2496 2523 2528 2756 557 802
+                  2205 50 444 1783 905 952 1994 2452 180 2576 1325 1342
+
+   7 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Categorical item multilevel growth of factors ;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        6165
+
+Number of dependent variables                                    6
+Number of independent variables                                  4
+Number of continuous latent variables                            3
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   SAD         BLUES       DEPRESS     HAPPY       ENJOY       HOPEFUL
+
+Observed independent variables
+   TD          FEMALE      AGEC70      K
+
+Continuous latent variables
+   FW          S           I
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TD          K
+
+  Between variables
+   FEMALE      AGEC70
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            3
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  cesdlongk.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            32
+     Number of y missing data patterns           0
+     Number of u missing data patterns          32
+     Number of clusters                       2762
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+ SAD            0.993
+ BLUES          0.984         0.991
+ DEPRESS        0.989         0.986         0.994
+ HAPPY          0.982         0.977         0.981         0.985
+ ENJOY          0.981         0.976         0.981         0.975         0.983
+ HOPEFUL        0.920         0.918         0.921         0.915         0.913
+
+
+           Covariance Coverage
+              HOPEFUL
+              ________
+ HOPEFUL        0.923
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SAD
+      Category 1    0.644         3938.000
+      Category 2    0.282         1724.000
+      Category 3    0.033          204.000
+      Category 4    0.041          253.000
+    BLUES
+      Category 1    0.765         4673.000
+      Category 2    0.160          979.000
+      Category 3    0.031          191.000
+      Category 4    0.044          266.000
+    DEPRESS
+      Category 1    0.634         3887.000
+      Category 2    0.268         1642.000
+      Category 3    0.040          248.000
+      Category 4    0.058          353.000
+    HAPPY
+      Category 1    0.631         3828.000
+      Category 2    0.114          691.000
+      Category 3    0.184         1118.000
+      Category 4    0.071          434.000
+    ENJOY
+      Category 1    0.712         4319.000
+      Category 2    0.095          574.000
+      Category 3    0.130          789.000
+      Category 4    0.063          381.000
+    HOPEFUL
+      Category 1    0.564         3213.000
+      Category 2    0.099          562.000
+      Category 3    0.166          943.000
+      Category 4    0.171          975.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     TD                    0.236       0.395       0.000   44.25%       0.000      0.000      0.300
+            6165.000       0.057      -1.306       0.600   23.07%       0.300      0.600
+     K                     1.000       0.000       1.000  100.00%       1.000      1.000      1.000
+            6165.000       0.000       0.000       1.000  100.00%       1.000      1.000
+     FEMALE                0.584      -0.342       0.000   41.56%       0.000      0.000      1.000
+            2762.000       0.243      -1.883       1.000   58.44%       1.000      1.000
+     AGEC70                0.364       0.673      -0.300   34.65%      -0.300      0.200      0.200
+            2762.000       0.419      -0.681       1.700    8.76%       0.200      1.200
+
+
+     WARNING:  THE SAMPLE COVARIANCE OF THE INDEPENDENT VARIABLES IS SINGULAR.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       32
+
+Loglikelihood
+
+          H0 Value                      -29743.055
+          H0 Scaling Correction Factor      1.1080
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   59550.110
+          Bayesian (BIC)                 59765.363
+          Sample-Size Adjusted BIC       59663.675
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ FW       BY
+    SAD                1.281      0.000    999.000    999.000
+    BLUES              1.419      0.068     20.800      0.000
+    DEPRESS            1.583      0.072     21.850      0.000
+    HAPPY              1.043      0.059     17.803      0.000
+    ENJOY              1.046      0.060     17.384      0.000
+    HOPEFUL            0.500      0.034     14.877      0.000
+
+ Residual Variances
+    FW                 0.434      0.042     10.408      0.000
+
+Between Level
+
+ I          ON
+    FEMALE             0.293      0.045      6.578      0.000
+    AGEC70             0.128      0.033      3.854      0.000
+
+ S          ON
+    FEMALE             0.004      0.105      0.043      0.966
+    AGEC70             0.134      0.089      1.498      0.134
+
+ I        WITH
+    S                 -0.165      0.085     -1.936      0.053
+
+ Intercepts
+    S                  0.255      0.087      2.914      0.004
+    I                  0.000      0.000    999.000    999.000
+
+ Thresholds
+    SAD$1              0.926      0.054     17.047      0.000
+    SAD$2              2.647      0.077     34.578      0.000
+    SAD$3              3.131      0.088     35.769      0.000
+    BLUES$1            1.606      0.071     22.523      0.000
+    BLUES$2            2.835      0.093     30.452      0.000
+    BLUES$3            3.304      0.104     31.640      0.000
+    DEPRESS$1          1.054      0.069     15.364      0.000
+    DEPRESS$2          2.796      0.101     27.778      0.000
+    DEPRESS$3          3.321      0.114     29.224      0.000
+    HAPPY$1            0.747      0.045     16.726      0.000
+    HAPPY$2            1.210      0.049     24.792      0.000
+    HAPPY$3            2.367      0.064     36.889      0.000
+    ENJOY$1            1.069      0.048     22.451      0.000
+    ENJOY$2            1.510      0.053     28.660      0.000
+    ENJOY$3            2.462      0.068     36.005      0.000
+    HOPEFUL$1          0.316      0.027     11.779      0.000
+    HOPEFUL$2          0.606      0.028     21.666      0.000
+    HOPEFUL$3          1.187      0.032     37.270      0.000
+
+ Residual Variances
+    S                  0.337      0.232      1.453      0.146
+    I                  0.537      0.057      9.477      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.120E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+     Beginning Time:  13:19:13
+        Ending Time:  13:26:15
+       Elapsed Time:  00:07:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

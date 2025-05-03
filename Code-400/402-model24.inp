@@ -1,0 +1,42 @@
+TITLE:    Categorical item multiple indicator LGCM of CESD
+DATA:     FILE = "cesdwide.dat";
+VARIABLE: NAMES = id female agec70 
+          u01 u02 u03 u04 u05 u06 
+          u31 u32 u33 u34 u35 u36 
+          u61 u62 u63 u64 u65 u66; 
+          IDVARIABLE = id ;
+          MISSING = . ;
+          CATEGORICAL are u01-u66 ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f0 by u01@1.281 u02-u06* (l1-l6); ! = 1.24246*sqrt(1.063)
+          f3 by u31@1.281 u32-u36* (l1-l6); ! where 1.063 is estimate
+          f6 by u61@1.281 u62-u66* (l1-l6); ! of VAR(F0) when l1 = 1.24246
+          f0 f3 f6 (psi) ; ! for comparability with MLGOF
+          ! Also no item-level resid covar for comparability with MLGOF
+          [u01$1 u31$1 u61$1] (t11) ;
+          [u01$2 u31$2 u61$2] (t12) ;
+          [u01$3 u31$3 u61$3] (t13) ;                  
+          [u02$1 u32$1 u62$1] (t21) ;
+          [u02$2 u32$2 u62$2] (t22) ;
+          [u02$3 u32$3 u62$3] (t23) ;                  
+          [u03$1 u33$1 u63$1] (t31) ;
+          [u03$2 u33$2 u63$2] (t32) ;
+          [u03$3 u33$3 u63$3] (t33) ;                  
+          [u04$1 u34$1 u64$1] (t41) ;
+          [u04$2 u34$2 u64$2] (t42) ;
+          [u04$3 u34$3 u64$3] (t43) ;                  
+          [u05$1 u35$1 u65$1] (t51) ;
+          [u05$2 u35$2 u65$2] (t52) ;
+          [u05$3 u35$3 u65$3] (t53) ;                  
+          [u06$1 u36$1 u66$1] (t61) ;
+          [u06$2 u36$2 u66$2] (t62) ;
+          [u06$3 u36$3 u66$3] (t63) ;
+          i by f0@1 f3@1 f6@1 ;
+          i* ;
+          [i@0] ;
+          s by f0@0 f3@0.3 f6@0.6 ;
+          s* ;
+          [s*] ;
+          i with s ;
+          i s on female agec70 ;
+OUTPUT: TECH4;

@@ -1,0 +1,776 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/03/2025   1:15 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    Categorical item multiple indicator LGCM of CESD
+  DATA:     FILE = "cesdwide.dat";
+  VARIABLE: NAMES = id female agec70
+            u01 u02 u03 u04 u05 u06
+            u31 u32 u33 u34 u35 u36
+            u61 u62 u63 u64 u65 u66;
+            IDVARIABLE = id ;
+            MISSING = . ;
+            CATEGORICAL are u01-u66 ;
+  ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+  MODEL:    f0 by u01@1.281 u02-u06* (l1-l6); ! = 1.24246*sqrt(1.063)
+            f3 by u31@1.281 u32-u36* (l1-l6); ! where 1.063 is estimate
+            f6 by u61@1.281 u62-u66* (l1-l6); ! of VAR(F0) when l1 = 1.24246
+            f0 f3 f6 (psi) ; ! for comparability with MLGOF
+            ! Also no item-level resid covar for comparability with MLGOF
+            [u01$1 u31$1 u61$1] (t11) ;
+            [u01$2 u31$2 u61$2] (t12) ;
+            [u01$3 u31$3 u61$3] (t13) ;
+            [u02$1 u32$1 u62$1] (t21) ;
+            [u02$2 u32$2 u62$2] (t22) ;
+            [u02$3 u32$3 u62$3] (t23) ;
+            [u03$1 u33$1 u63$1] (t31) ;
+            [u03$2 u33$2 u63$2] (t32) ;
+            [u03$3 u33$3 u63$3] (t33) ;
+            [u04$1 u34$1 u64$1] (t41) ;
+            [u04$2 u34$2 u64$2] (t42) ;
+            [u04$3 u34$3 u64$3] (t43) ;
+            [u05$1 u35$1 u65$1] (t51) ;
+            [u05$2 u35$2 u65$2] (t52) ;
+            [u05$3 u35$3 u65$3] (t53) ;
+            [u06$1 u36$1 u66$1] (t61) ;
+            [u06$2 u36$2 u66$2] (t62) ;
+            [u06$3 u36$3 u66$3] (t63) ;
+            i by f0@1 f3@1 f6@1 ;
+            i* ;
+            [i@0] ;
+            s by f0@0 f3@0.3 f6@0.6 ;
+            s* ;
+            [s*] ;
+            i with s ;
+            i s on female agec70 ;
+  OUTPUT: TECH4;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Categorical item multiple indicator LGCM of CESD
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        2762
+
+Number of dependent variables                                   18
+Number of independent variables                                  2
+Number of continuous latent variables                            5
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   U01         U02         U03         U04         U05         U06
+   U31         U32         U33         U34         U35         U36
+   U61         U62         U63         U64         U65         U66
+
+Observed independent variables
+   FEMALE      AGEC70
+
+Continuous latent variables
+   F0          F3          F6          I           S
+
+Variables with special functions
+
+  ID variable           ID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            3
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  cesdwide.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns           140
+     Number of y missing data patterns           0
+     Number of u missing data patterns         140
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              U01           U02           U03           U04           U05
+              ________      ________      ________      ________      ________
+ U01            0.981
+ U02            0.975         0.980
+ U03            0.979         0.977         0.983
+ U04            0.975         0.970         0.974         0.976
+ U05            0.974         0.969         0.974         0.969         0.975
+ U06            0.915         0.914         0.917         0.913         0.911
+ U31            0.711         0.711         0.711         0.708         0.707
+ U32            0.707         0.706         0.706         0.703         0.702
+ U33            0.711         0.711         0.711         0.708         0.707
+ U34            0.701         0.700         0.701         0.698         0.696
+ U35            0.699         0.699         0.699         0.696         0.694
+ U36            0.642         0.642         0.642         0.639         0.638
+ U61            0.501         0.500         0.501         0.499         0.498
+ U62            0.502         0.501         0.502         0.500         0.499
+ U63            0.501         0.501         0.501         0.499         0.499
+ U64            0.498         0.498         0.499         0.496         0.496
+ U65            0.498         0.498         0.499         0.496         0.496
+ U66            0.479         0.478         0.479         0.477         0.476
+
+
+           Covariance Coverage
+              U06           U31           U32           U33           U34
+              ________      ________      ________      ________      ________
+ U06            0.919
+ U31            0.665         0.724
+ U32            0.662         0.715         0.720
+ U33            0.665         0.722         0.716         0.725
+ U34            0.657         0.712         0.706         0.711         0.714
+ U35            0.655         0.710         0.703         0.710         0.702
+ U36            0.603         0.652         0.648         0.652         0.646
+ U61            0.467         0.485         0.484         0.485         0.481
+ U62            0.468         0.487         0.485         0.486         0.482
+ U63            0.467         0.486         0.485         0.486         0.482
+ U64            0.465         0.483         0.482         0.483         0.479
+ U65            0.465         0.484         0.482         0.483         0.480
+ U66            0.447         0.464         0.462         0.463         0.459
+
+
+           Covariance Coverage
+              U35           U36           U61           U62           U63
+              ________      ________      ________      ________      ________
+ U35            0.712
+ U36            0.644         0.654
+ U61            0.479         0.446         0.510
+ U62            0.480         0.447         0.507         0.512
+ U63            0.479         0.446         0.508         0.508         0.511
+ U64            0.476         0.444         0.504         0.505         0.505
+ U65            0.478         0.445         0.506         0.505         0.505
+ U66            0.457         0.429         0.485         0.486         0.487
+
+
+           Covariance Coverage
+              U64           U65           U66
+              ________      ________      ________
+ U64            0.508
+ U65            0.504         0.508
+ U66            0.483         0.483         0.488
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    U01
+      Category 1    0.653         1768.000
+      Category 2    0.274          743.000
+      Category 3    0.035           96.000
+      Category 4    0.038          102.000
+    U02
+      Category 1    0.774         2097.000
+      Category 2    0.150          406.000
+      Category 3    0.032           87.000
+      Category 4    0.044          118.000
+    U03
+      Category 1    0.635         1726.000
+      Category 2    0.267          725.000
+      Category 3    0.037          101.000
+      Category 4    0.060          164.000
+    U04
+      Category 1    0.662         1786.000
+      Category 2    0.100          270.000
+      Category 3    0.163          440.000
+      Category 4    0.075          201.000
+    U05
+      Category 1    0.759         2045.000
+      Category 2    0.075          202.000
+      Category 3    0.107          289.000
+      Category 4    0.059          158.000
+    U06
+      Category 1    0.569         1444.000
+      Category 2    0.069          175.000
+      Category 3    0.158          402.000
+      Category 4    0.204          518.000
+    U31
+      Category 1    0.651         1302.000
+      Category 2    0.273          547.000
+      Category 3    0.032           65.000
+      Category 4    0.043           87.000
+    U32
+      Category 1    0.749         1489.000
+      Category 2    0.178          353.000
+      Category 3    0.030           60.000
+      Category 4    0.043           86.000
+    U33
+      Category 1    0.651         1303.000
+      Category 2    0.254          508.000
+      Category 3    0.039           79.000
+      Category 4    0.056          113.000
+    U34
+      Category 1    0.598         1179.000
+      Category 2    0.141          279.000
+      Category 3    0.200          395.000
+      Category 4    0.060          119.000
+    U35
+      Category 1    0.675         1328.000
+      Category 2    0.115          227.000
+      Category 3    0.154          303.000
+      Category 4    0.055          108.000
+    U36
+      Category 1    0.568         1026.000
+      Category 2    0.131          237.000
+      Category 3    0.163          294.000
+      Category 4    0.138          249.000
+    U61
+      Category 1    0.616          868.000
+      Category 2    0.308          434.000
+      Category 3    0.031           43.000
+      Category 4    0.045           64.000
+    U62
+      Category 1    0.769         1087.000
+      Category 2    0.156          220.000
+      Category 3    0.031           44.000
+      Category 4    0.044           62.000
+    U63
+      Category 1    0.608          858.000
+      Category 2    0.290          409.000
+      Category 3    0.048           68.000
+      Category 4    0.054           76.000
+    U64
+      Category 1    0.616          863.000
+      Category 2    0.101          142.000
+      Category 3    0.202          283.000
+      Category 4    0.081          114.000
+    U65
+      Category 1    0.674          946.000
+      Category 2    0.103          145.000
+      Category 3    0.140          197.000
+      Category 4    0.082          115.000
+    U66
+      Category 1    0.551          743.000
+      Category 2    0.111          150.000
+      Category 3    0.183          247.000
+      Category 4    0.154          208.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     FEMALE                0.584      -0.342       0.000   41.56%       0.000      0.000      1.000
+            2762.000       0.243      -1.883       1.000   58.44%       1.000      1.000
+     AGEC70                0.364       0.673      -0.300   34.65%      -0.300      0.200      0.200
+            2762.000       0.419      -0.681       1.700    8.76%       0.200      1.200
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       32
+
+Loglikelihood
+
+          H0 Value                      -29743.061
+          H0 Scaling Correction Factor      1.1084
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   59550.123
+          Bayesian (BIC)                 59739.682
+          Sample-Size Adjusted BIC       59638.007
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F0       BY
+    U01                1.281      0.000    999.000    999.000
+    U02                1.419      0.068     20.838      0.000
+    U03                1.583      0.072     21.863      0.000
+    U04                1.042      0.058     17.890      0.000
+    U05                1.045      0.060     17.494      0.000
+    U06                0.499      0.033     14.933      0.000
+
+ F3       BY
+    U31                1.281      0.000    999.000    999.000
+    U32                1.419      0.068     20.838      0.000
+    U33                1.583      0.072     21.863      0.000
+    U34                1.042      0.058     17.890      0.000
+    U35                1.045      0.060     17.494      0.000
+    U36                0.499      0.033     14.933      0.000
+
+ F6       BY
+    U61                1.281      0.000    999.000    999.000
+    U62                1.419      0.068     20.838      0.000
+    U63                1.583      0.072     21.863      0.000
+    U64                1.042      0.058     17.890      0.000
+    U65                1.045      0.060     17.494      0.000
+    U66                0.499      0.033     14.933      0.000
+
+ I        BY
+    F0                 1.000      0.000    999.000    999.000
+    F3                 1.000      0.000    999.000    999.000
+    F6                 1.000      0.000    999.000    999.000
+
+ S        BY
+    F0                 0.000      0.000    999.000    999.000
+    F3                 0.300      0.000    999.000    999.000
+    F6                 0.600      0.000    999.000    999.000
+
+ I          ON
+    FEMALE             0.293      0.044      6.584      0.000
+    AGEC70             0.128      0.033      3.857      0.000
+
+ S          ON
+    FEMALE             0.005      0.105      0.043      0.965
+    AGEC70             0.134      0.089      1.498      0.134
+
+ I        WITH
+    S                 -0.165      0.086     -1.914      0.056
+
+ Intercepts
+    I                  0.000      0.000    999.000    999.000
+    S                  0.255      0.087      2.913      0.004
+
+ Thresholds
+    U01$1              0.926      0.054     17.074      0.000
+    U01$2              2.648      0.076     34.710      0.000
+    U01$3              3.131      0.087     35.909      0.000
+    U02$1              1.607      0.071     22.530      0.000
+    U02$2              2.836      0.093     30.459      0.000
+    U02$3              3.305      0.104     31.646      0.000
+    U03$1              1.054      0.069     15.377      0.000
+    U03$2              2.797      0.101     27.798      0.000
+    U03$3              3.322      0.114     29.240      0.000
+    U04$1              0.747      0.045     16.725      0.000
+    U04$2              1.210      0.049     24.789      0.000
+    U04$3              2.367      0.064     36.892      0.000
+    U05$1              1.069      0.048     22.448      0.000
+    U05$2              1.509      0.053     28.659      0.000
+    U05$3              2.461      0.068     36.014      0.000
+    U06$1              0.316      0.027     11.781      0.000
+    U06$2              0.606      0.028     21.667      0.000
+    U06$3              1.186      0.032     37.273      0.000
+    U31$1              0.926      0.054     17.074      0.000
+    U31$2              2.648      0.076     34.710      0.000
+    U31$3              3.131      0.087     35.909      0.000
+    U32$1              1.607      0.071     22.530      0.000
+    U32$2              2.836      0.093     30.459      0.000
+    U32$3              3.305      0.104     31.646      0.000
+    U33$1              1.054      0.069     15.377      0.000
+    U33$2              2.797      0.101     27.798      0.000
+    U33$3              3.322      0.114     29.240      0.000
+    U34$1              0.747      0.045     16.725      0.000
+    U34$2              1.210      0.049     24.789      0.000
+    U34$3              2.367      0.064     36.892      0.000
+    U35$1              1.069      0.048     22.448      0.000
+    U35$2              1.509      0.053     28.659      0.000
+    U35$3              2.461      0.068     36.014      0.000
+    U36$1              0.316      0.027     11.781      0.000
+    U36$2              0.606      0.028     21.667      0.000
+    U36$3              1.186      0.032     37.273      0.000
+    U61$1              0.926      0.054     17.074      0.000
+    U61$2              2.648      0.076     34.710      0.000
+    U61$3              3.131      0.087     35.909      0.000
+    U62$1              1.607      0.071     22.530      0.000
+    U62$2              2.836      0.093     30.459      0.000
+    U62$3              3.305      0.104     31.646      0.000
+    U63$1              1.054      0.069     15.377      0.000
+    U63$2              2.797      0.101     27.798      0.000
+    U63$3              3.322      0.114     29.240      0.000
+    U64$1              0.747      0.045     16.725      0.000
+    U64$2              1.210      0.049     24.789      0.000
+    U64$3              2.367      0.064     36.892      0.000
+    U65$1              1.069      0.048     22.448      0.000
+    U65$2              1.509      0.053     28.659      0.000
+    U65$3              2.461      0.068     36.014      0.000
+    U66$1              0.316      0.027     11.781      0.000
+    U66$2              0.606      0.028     21.667      0.000
+    U66$3              1.186      0.032     37.273      0.000
+
+ Residual Variances
+    F0                 0.433      0.042     10.425      0.000
+    F3                 0.433      0.042     10.425      0.000
+    F6                 0.433      0.042     10.425      0.000
+    I                  0.537      0.057      9.466      0.000
+    S                  0.338      0.237      1.425      0.154
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.120E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+ U01
+    Category 1         0.655
+    Category 2         0.273
+    Category 3         0.033
+    Category 4         0.040
+ U02
+    Category 1         0.773
+    Category 2         0.155
+    Category 3         0.031
+    Category 4         0.042
+ U03
+    Category 1         0.648
+    Category 2         0.257
+    Category 3         0.039
+    Category 4         0.056
+ U04
+    Category 1         0.641
+    Category 2         0.111
+    Category 3         0.179
+    Category 4         0.069
+ U05
+    Category 1         0.720
+    Category 2         0.093
+    Category 3         0.127
+    Category 4         0.061
+ U06
+    Category 1         0.573
+    Category 2         0.098
+    Category 3         0.161
+    Category 4         0.167
+ U31
+    Category 1         0.630
+    Category 2         0.291
+    Category 3         0.036
+    Category 4         0.043
+ U32
+    Category 1         0.754
+    Category 2         0.167
+    Category 3         0.033
+    Category 4         0.046
+ U33
+    Category 1         0.621
+    Category 2         0.275
+    Category 3         0.043
+    Category 4         0.061
+ U34
+    Category 1         0.617
+    Category 2         0.117
+    Category 3         0.191
+    Category 4         0.075
+ U35
+    Category 1         0.700
+    Category 2         0.098
+    Category 3         0.136
+    Category 4         0.066
+ U36
+    Category 1         0.558
+    Category 2         0.100
+    Category 3         0.166
+    Category 4         0.176
+ U61
+    Category 1         0.602
+    Category 2         0.308
+    Category 3         0.040
+    Category 4         0.050
+ U62
+    Category 1         0.729
+    Category 2         0.180
+    Category 3         0.037
+    Category 4         0.054
+ U63
+    Category 1         0.591
+    Category 2         0.291
+    Category 3         0.048
+    Category 4         0.071
+ U64
+    Category 1         0.592
+    Category 2         0.120
+    Category 3         0.204
+    Category 4         0.085
+ U65
+    Category 1         0.676
+    Category 2         0.102
+    Category 3         0.146
+    Category 4         0.076
+ U66
+    Category 1         0.541
+    Category 2         0.101
+    Category 3         0.170
+    Category 4         0.187
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+                0.218         0.309         0.401         0.218         0.306
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+                0.584         0.364
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+                0.028         0.034         0.045         0.028         0.056
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+                0.009         0.012
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+                7.712         9.135         8.831         7.712         5.456
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+               62.315        29.528
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+                0.000         0.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             1.000
+ F3             0.519         0.937
+ F6             0.472         0.487         0.936
+ I              0.566         0.519         0.472         0.566
+ S             -0.157        -0.053         0.051        -0.157         0.345
+ FEMALE         0.073         0.074         0.075         0.073         0.003
+ AGEC70         0.058         0.074         0.091         0.058         0.056
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         0.243
+ AGEC70         0.014         0.419
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             0.078
+ F3             0.045         0.071
+ F6             0.044         0.046         0.078
+ I              0.058         0.045         0.044         0.058
+ S              0.087         0.055         0.093         0.087         0.238
+ FEMALE         0.011         0.010         0.013         0.011         0.025
+ AGEC70         0.014         0.013         0.020         0.014         0.037
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         0.007
+ AGEC70         0.006         0.011
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0            12.825
+ F3            11.579        13.264
+ F6            10.661        10.505        11.932
+ I              9.693        11.579        10.661         9.693
+ S             -1.806        -0.973         0.545        -1.806         1.453
+ FEMALE         6.637         7.659         5.554         6.637         0.119
+ AGEC70         4.105         5.717         4.610         4.105         1.502
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE        37.162
+ AGEC70         2.346        37.162
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             0.000
+ F3             0.000         0.000
+ F6             0.000         0.000         0.000
+ I              0.000         0.000         0.000         0.000
+ S              0.071         0.331         0.586         0.071         0.146
+ FEMALE         0.000         0.000         0.000         0.000         0.906
+ AGEC70         0.000         0.000         0.000         0.000         0.133
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         0.000
+ AGEC70         0.019         0.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             1.000
+ F3             0.537         1.000
+ F6             0.488         0.521         1.000
+ I              0.753         0.713         0.649         1.000
+ S             -0.267        -0.093         0.089        -0.354         1.000
+ FEMALE         0.148         0.155         0.157         0.197         0.010
+ AGEC70         0.089         0.119         0.146         0.118         0.147
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         1.000
+ AGEC70         0.045         1.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             0.000
+ F3             0.022         0.000
+ F6             0.029         0.024         0.000
+ I              0.021         0.015         0.044         0.000
+ S              0.091         0.103         0.138         0.116         0.000
+ FEMALE         0.021         0.019         0.027         0.028         0.088
+ AGEC70         0.021         0.020         0.030         0.029         0.107
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         0.000
+ AGEC70         0.019         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0           999.000
+ F3            24.501       999.000
+ F6            16.832        21.423       999.000
+ I             36.424        47.019        14.857       999.000
+ S             -2.917        -0.905         0.644        -3.044       999.000
+ FEMALE         7.032         8.225         5.774         6.941         0.118
+ AGEC70         4.155         5.936         4.826         4.129         1.376
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE       999.000
+ AGEC70         2.353       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F0            F3            F6            I             S
+              ________      ________      ________      ________      ________
+ F0             0.000
+ F3             0.000         0.000
+ F6             0.000         0.000         0.000
+ I              0.000         0.000         0.000         0.000
+ S              0.004         0.366         0.519         0.002         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.906
+ AGEC70         0.000         0.000         0.000         0.000         0.169
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              FEMALE        AGEC70
+              ________      ________
+ FEMALE         0.000
+ AGEC70         0.019         0.000
+
+
+     Beginning Time:  13:15:26
+        Ending Time:  13:19:13
+       Elapsed Time:  00:03:47
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

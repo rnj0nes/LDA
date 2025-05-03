@@ -1,0 +1,641 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/03/2025   1:15 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    Categorical item CFA of CESD at baseline
+  DATA:     FILE = cesditems.dat ;
+  VARIABLE: NAMES = sad blues depress happy enjoy hopeful
+                    agec70 female;
+            CATEGORICAL are sad-hopeful ;
+            MISSING = . ;
+  ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+  MODEL:    f by sad-hopeful*;
+            f@1;
+            f on agec70 female ;
+  OUTPUT:   STDYX; TECH1 ; TECH4; !SVALUES ;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Categorical item CFA of CESD at baseline
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        2728
+
+Number of dependent variables                                    6
+Number of independent variables                                  2
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   SAD         BLUES       DEPRESS     HAPPY       ENJOY       HOPEFUL
+
+Observed independent variables
+   AGEC70      FEMALE
+
+Continuous latent variables
+   F
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  cesditems.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            22
+     Number of y missing data patterns           0
+     Number of u missing data patterns          22
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+ SAD            0.993
+ BLUES          0.987         0.993
+ DEPRESS        0.991         0.989         0.996
+ HAPPY          0.987         0.982         0.986         0.989
+ ENJOY          0.986         0.981         0.986         0.981         0.988
+ HOPEFUL        0.927         0.925         0.929         0.924         0.923
+
+
+           Covariance Coverage
+              HOPEFUL
+              ________
+ HOPEFUL        0.931
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SAD
+      Category 1    0.653         1768.000
+      Category 2    0.274          743.000
+      Category 3    0.035           96.000
+      Category 4    0.038          102.000
+    BLUES
+      Category 1    0.774         2097.000
+      Category 2    0.150          406.000
+      Category 3    0.032           87.000
+      Category 4    0.044          118.000
+    DEPRESS
+      Category 1    0.635         1726.000
+      Category 2    0.267          725.000
+      Category 3    0.037          101.000
+      Category 4    0.060          164.000
+    HAPPY
+      Category 1    0.662         1786.000
+      Category 2    0.100          270.000
+      Category 3    0.163          440.000
+      Category 4    0.075          201.000
+    ENJOY
+      Category 1    0.759         2045.000
+      Category 2    0.075          202.000
+      Category 3    0.107          289.000
+      Category 4    0.059          158.000
+    HOPEFUL
+      Category 1    0.569         1444.000
+      Category 2    0.069          175.000
+      Category 3    0.158          402.000
+      Category 4    0.204          518.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AGEC70                0.363       0.675      -0.300   34.60%      -0.300      0.200      0.200
+            2728.000       0.418      -0.674       1.700    8.72%       0.200      1.200
+     FEMALE                0.585      -0.345       0.000   41.50%       0.000      0.000      1.000
+            2728.000       0.243      -1.881       1.000   58.50%       1.000      1.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       26
+
+Loglikelihood
+
+          H0 Value                      -12922.703
+          H0 Scaling Correction Factor      1.0499
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   25897.405
+          Bayesian (BIC)                 26051.100
+          Sample-Size Adjusted BIC       25968.489
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    SAD                1.222      0.065     18.771      0.000
+    BLUES              1.328      0.085     15.646      0.000
+    DEPRESS            1.518      0.091     16.686      0.000
+    HAPPY              0.973      0.056     17.312      0.000
+    ENJOY              0.981      0.061     16.195      0.000
+    HOPEFUL            0.511      0.037     13.980      0.000
+
+ F          ON
+    AGEC70             0.143      0.035      4.090      0.000
+    FEMALE             0.311      0.046      6.718      0.000
+
+ Thresholds
+    SAD$1              0.906      0.062     14.515      0.000
+    SAD$2              2.589      0.099     26.176      0.000
+    SAD$3              3.124      0.120     26.039      0.000
+    BLUES$1            1.568      0.090     17.475      0.000
+    BLUES$2            2.702      0.126     21.389      0.000
+    BLUES$3            3.172      0.145     21.838      0.000
+    DEPRESS$1          0.996      0.079     12.604      0.000
+    DEPRESS$2          2.721      0.134     20.246      0.000
+    DEPRESS$3          3.185      0.152     20.917      0.000
+    HAPPY$1            0.805      0.053     15.274      0.000
+    HAPPY$2            1.221      0.059     20.795      0.000
+    HAPPY$3            2.249      0.083     26.975      0.000
+    ENJOY$1            1.210      0.061     19.762      0.000
+    ENJOY$2            1.585      0.068     23.237      0.000
+    ENJOY$3            2.429      0.092     26.482      0.000
+    HOPEFUL$1          0.317      0.034      9.409      0.000
+    HOPEFUL$2          0.520      0.035     14.876      0.000
+    HOPEFUL$3          1.051      0.040     26.108      0.000
+
+ Residual Variances
+    F                  1.000      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.317E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+ SAD
+    Category 1         0.651
+    Category 2         0.274
+    Category 3         0.037
+    Category 4         0.038
+ BLUES
+    Category 1         0.773
+    Category 2         0.150
+    Category 3         0.033
+    Category 4         0.044
+ DEPRESS
+    Category 1         0.636
+    Category 2         0.265
+    Category 3         0.037
+    Category 4         0.062
+ HAPPY
+    Category 1         0.660
+    Category 2         0.101
+    Category 3         0.165
+    Category 4         0.075
+ ENJOY
+    Category 1         0.756
+    Category 2         0.075
+    Category 3         0.109
+    Category 4         0.060
+ HOPEFUL
+    Category 1         0.570
+    Category 2         0.069
+    Category 3         0.157
+    Category 4         0.204
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    SAD                0.779      0.016     47.857      0.000
+    BLUES              0.803      0.018     44.122      0.000
+    DEPRESS            0.839      0.015     56.578      0.000
+    HAPPY              0.703      0.021     34.256      0.000
+    ENJOY              0.706      0.022     32.258      0.000
+    HOPEFUL            0.461      0.026     17.809      0.000
+
+ F          ON
+    AGEC70             0.091      0.022      4.116      0.000
+    FEMALE             0.151      0.022      6.844      0.000
+
+ Thresholds
+    SAD$1              0.568      0.033     17.394      0.000
+    SAD$2              1.624      0.040     40.243      0.000
+    SAD$3              1.959      0.049     39.826      0.000
+    BLUES$1            0.934      0.034     27.339      0.000
+    BLUES$2            1.609      0.040     39.869      0.000
+    BLUES$3            1.889      0.047     40.272      0.000
+    DEPRESS$1          0.541      0.034     16.098      0.000
+    DEPRESS$2          1.480      0.040     37.337      0.000
+    DEPRESS$3          1.732      0.044     39.106      0.000
+    HAPPY$1            0.573      0.032     18.141      0.000
+    HAPPY$2            0.869      0.032     26.843      0.000
+    HAPPY$3            1.599      0.040     40.084      0.000
+    ENJOY$1            0.857      0.032     26.521      0.000
+    ENJOY$2            1.122      0.034     33.152      0.000
+    ENJOY$3            1.720      0.042     40.871      0.000
+    HOPEFUL$1          0.281      0.029      9.808      0.000
+    HOPEFUL$2          0.462      0.029     15.995      0.000
+    HOPEFUL$3          0.933      0.031     30.296      0.000
+
+ Residual Variances
+    F                  0.968      0.008    124.714      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    SAD                0.607      0.025     23.929      0.000
+    BLUES              0.645      0.029     22.061      0.000
+    DEPRESS            0.704      0.025     28.289      0.000
+    HAPPY              0.494      0.029     17.128      0.000
+    ENJOY              0.499      0.031     16.129      0.000
+    HOPEFUL            0.212      0.024      8.904      0.000
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    F                  0.032      0.008      4.131      0.000
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           TAU
+              SAD$1         SAD$2         SAD$3         BLUES$1       BLUES$2
+              ________      ________      ________      ________      ________
+                    9            10            11            12            13
+
+
+           TAU
+              BLUES$3       DEPRESS$      DEPRESS$      DEPRESS$      HAPPY$1
+              ________      ________      ________      ________      ________
+                   14            15            16            17            18
+
+
+           TAU
+              HAPPY$2       HAPPY$3       ENJOY$1       ENJOY$2       ENJOY$3
+              ________      ________      ________      ________      ________
+                   19            20            21            22            23
+
+
+           TAU
+              HOPEFUL$      HOPEFUL$      HOPEFUL$
+              ________      ________      ________
+                   24            25            26
+
+
+           NU
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              HOPEFUL       AGEC70        FEMALE
+              ________      ________      ________
+                    0             0             0
+
+
+           LAMBDA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ SAD                1             0             0
+ BLUES              2             0             0
+ DEPRESS            3             0             0
+ HAPPY              4             0             0
+ ENJOY              5             0             0
+ HOPEFUL            6             0             0
+ AGEC70             0             0             0
+ FEMALE             0             0             0
+
+
+           THETA
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+ SAD                0
+ BLUES              0             0
+ DEPRESS            0             0             0
+ HAPPY              0             0             0             0
+ ENJOY              0             0             0             0             0
+ HOPEFUL            0             0             0             0             0
+ AGEC70             0             0             0             0             0
+ FEMALE             0             0             0             0             0
+
+
+           THETA
+              HOPEFUL       AGEC70        FEMALE
+              ________      ________      ________
+ HOPEFUL            0
+ AGEC70             0             0
+ FEMALE             0             0             0
+
+
+           ALPHA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                    0             0             0
+
+
+           BETA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F                  0             7             8
+ AGEC70             0             0             0
+ FEMALE             0             0             0
+
+
+           PSI
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F                  0
+ AGEC70             0             0
+ FEMALE             0             0             0
+
+
+     STARTING VALUES
+
+
+           TAU
+              SAD$1         SAD$2         SAD$3         BLUES$1       BLUES$2
+              ________      ________      ________      ________      ________
+                0.350         1.411         1.801         0.685         1.390
+
+
+           TAU
+              BLUES$3       DEPRESS$      DEPRESS$      DEPRESS$      HAPPY$1
+              ________      ________      ________      ________      ________
+                1.716         0.309         1.236         1.525         0.374
+
+
+           TAU
+              HAPPY$2       HAPPY$3       ENJOY$1       ENJOY$2       ENJOY$3
+              ________      ________      ________      ________      ________
+                0.647         1.400         0.638         0.897         1.542
+
+
+           TAU
+              HOPEFUL$      HOPEFUL$      HOPEFUL$
+              ________      ________      ________
+                0.154         0.314         0.756
+
+
+           NU
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              HOPEFUL       AGEC70        FEMALE
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           LAMBDA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ SAD            1.000         0.000         0.000
+ BLUES          1.000         0.000         0.000
+ DEPRESS        1.000         0.000         0.000
+ HAPPY          1.000         0.000         0.000
+ ENJOY          1.000         0.000         0.000
+ HOPEFUL        1.000         0.000         0.000
+ AGEC70         0.000         1.000         0.000
+ FEMALE         0.000         0.000         1.000
+
+
+           THETA
+              SAD           BLUES         DEPRESS       HAPPY         ENJOY
+              ________      ________      ________      ________      ________
+ SAD            1.000
+ BLUES          0.000         1.000
+ DEPRESS        0.000         0.000         1.000
+ HAPPY          0.000         0.000         0.000         1.000
+ ENJOY          0.000         0.000         0.000         0.000         1.000
+ HOPEFUL        0.000         0.000         0.000         0.000         0.000
+ AGEC70         0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              HOPEFUL       AGEC70        FEMALE
+              ________      ________      ________
+ HOPEFUL        1.000
+ AGEC70         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+
+
+           ALPHA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           BETA
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              0.000         0.000         0.000
+ AGEC70         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+
+
+           PSI
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              1.000
+ AGEC70         0.000         0.209
+ FEMALE         0.000         0.000         0.121
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                0.234         0.363         0.585
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                0.030         0.012         0.009
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                7.914        29.327        62.018
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              1.033
+ AGEC70         0.064         0.418
+ FEMALE         0.077         0.013         0.243
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              0.008
+ AGEC70         0.015         0.011
+ FEMALE         0.011         0.006         0.007
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F            124.714
+ AGEC70         4.302        36.932
+ FEMALE         6.753         2.099        36.932
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              0.000
+ AGEC70         0.000         0.000
+ FEMALE         0.000         0.036         0.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              1.000
+ AGEC70         0.097         1.000
+ FEMALE         0.154         0.040         1.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              0.000
+ AGEC70         0.022         0.000
+ FEMALE         0.022         0.019         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F            999.000
+ AGEC70         4.364       999.000
+ FEMALE         7.004         2.104       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              F             AGEC70        FEMALE
+              ________      ________      ________
+ F              0.000
+ AGEC70         0.000         0.000
+ FEMALE         0.000         0.035         0.000
+
+
+     Beginning Time:  13:15:25
+        Ending Time:  13:15:25
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

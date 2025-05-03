@@ -1,0 +1,6 @@
+TITLE:    Continuous item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful; 
+          MISSING = . ;
+MODEL:    f by sad@1 blues-hopeful*;
+OUTPUT:   STDYX  ;

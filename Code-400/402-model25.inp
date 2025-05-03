@@ -1,0 +1,21 @@
+TITLE:    Categorical item multilevel growth of factors ;
+DATA:     FILE = cesdlongk.dat ;
+          VARIANCES = NOCHECK ;
+VARIABLE: NAMES = id td female agec70 sad blues depress happy enjoy hopeful k ; 
+          CATEGORICAL are sad blues depress happy enjoy hopeful ;
+          MISSING = . ;
+          WITHIN = td k ;
+          BETWEEN = agec70 female ; 
+          CLUSTER = id ;
+ANALYSIS: TYPE = TWOLEVEL RANDOM ;
+          ESTIMATOR = MLR ; 
+          LINK = PROBIT ;
+MODEL:    %WITHIN%
+          fw by sad@1.281 blues-hopeful*; 
+          s | fw on td ;
+          i | fw on k ;
+          %BETWEEN%
+          !sad-hopeful@0 ; ! This would be included in continuous variable case
+          [i@0] ;
+          i with s ;
+          i s on female agec70 ;

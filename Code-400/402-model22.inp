@@ -1,0 +1,9 @@
+TITLE:    Categorical item CFA of CESD at baseline
+DATA:     FILE = cesditems.dat ;
+VARIABLE: NAMES = sad blues depress happy enjoy hopeful; 
+          CATEGORICAL are all ;
+          MISSING = . ;
+ANALYSIS: ESTIMATOR = MLR ; LINK = PROBIT ;
+MODEL:    f by sad@1.24328 blues-hopeful*; 
+          f*1;
+OUTPUT:   TECH1 ; !SVALUES ;

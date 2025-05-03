@@ -1,0 +1,13 @@
+TITLE:    MLFA Preliminary Model 3
+DATA:     FILE = cesd.dat ;
+VARIABLE: NAMES = id t female agec70 y1 y2 y3 y4 y5 y6 ; 
+          USEVARIABLES = female agec70 y1-y6 ;
+          USEOBSERVATIONS = (t==0) ;
+          MISSING = . ;
+OUTPUT:   STDYX ; TECH4 ;
+MODEL:    fw BY y1@0.51150 (l1);
+          fw by y2-y6* (l2-l6);
+          fw*; 
+          fw on female agec70 ;
+          [y1@1.35775]; 
+          [fw*];

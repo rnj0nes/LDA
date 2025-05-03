@@ -1,0 +1,409 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/03/2025  12:55 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    MLM CESD score
+  DATA:     FILE = cesd.dat ;
+  VARIABLE: NAMES = id td yz female agec70;
+            MISSING = . ;
+            WITHIN = td ;
+            BETWEEN = agec70 female ;
+            CLUSTER = id ;
+  ANALYSIS: TYPE = TWOLEVEL RANDOM ;
+  OUTPUT: TECH1;
+  MODEL:    %WITHIN%
+              s | yz on td ;
+            %BETWEEN%
+              yz on agec70 female ;
+              s on agec70 female ;
+              yz with s ;
+
+
+
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      YZ          762 765 769 50 776 1497 1510 792 1538 1559 425 96 1590 836 1665 1666 1682 853
+                  860 1716 457 889 899 1773 1777 1778 1783 1800 930 1843 1846 255 1872 1874 257
+                  1883 259 1899 1923 501 969 1939 1969 990 1991 1992 1997 1999 1004 513 2024 1015
+                  524 2070 2090 2092 2109 2159 2162 2165 564 2236 2242 25 2318 2330 2338 329 601
+                  2371 2374 1179 603 2382 2393 611 2398 2402 2411 331 2452 8 159 2471 1241 653
+                  163 2542 1270 1283 1293 1295 1301 2598 668 2617 2620 1316 2623 2625 1322 1323
+                  2632 1328 2648 2650 2679 2684 173 2686 2690 361 2707 1356 363 709 2750 180 2783
+                  1399 1404 195 740 396 1419 1948 2634 346 347 1477 1484 747 1561 781 384 1636
+                  1641 812 1651 1663 1684 1692 1694 1696 399 843 1724 1737 1744 1745 857 1760
+                  865 414 418 895 924 1869 23 1903 218 108 111 997 498 2023 2034 2045 2061 2067
+                  2082 2086 1051 1062 526 2173 2179 260 122 2199 2216 1120 2252 1149 2290 2291
+                  1156 1157 276 2321 1169 2325 278 279 2353 2357 284 588 2392 132 598 2432 2444
+                  2469 615 2483 298 1258 1265 1278 2525 2526 630 2539 2547 2554 2577 639 2586
+                  648 1325 1342 34 2680 675 2694 1383 1393 1396 703 2793 704 2798 73 1445
+
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+MLM CESD score
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        6165
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   YZ
+
+Observed independent variables
+   TD          FEMALE      AGEC70
+
+Continuous latent variables
+   S
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TD
+
+  Between variables
+   FEMALE      AGEC70
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  cesd.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                       2762
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              YZ            TD            FEMALE        AGEC70
+              ________      ________      ________      ________
+ YZ             1.000
+ TD             1.000         1.000
+ FEMALE         1.000         1.000         1.000
+ AGEC70         1.000         1.000         1.000         1.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     YZ                    0.028       1.339      -0.908   28.34%      -0.908     -0.377     -0.112
+            6165.000       1.022       1.522       3.867    0.44%      -0.112      0.684
+     TD                    0.236       0.395       0.000   44.25%       0.000      0.000      0.300
+            6165.000       0.057      -1.306       0.600   23.07%       0.300      0.600
+     FEMALE                0.584      -0.342       0.000   41.56%       0.000      0.000      1.000
+            2762.000       0.243      -1.883       1.000   58.44%       1.000      1.000
+     AGEC70                0.364       0.673      -0.300   34.65%      -0.300      0.200      0.200
+            2762.000       0.419      -0.681       1.700    8.76%       0.200      1.200
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       10
+
+Loglikelihood
+
+          H0 Value                       -8447.120
+          H0 Scaling Correction Factor      1.2863
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   16914.241
+          Bayesian (BIC)                 16981.507
+          Sample-Size Adjusted BIC       16949.730
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Residual Variances
+    YZ                 0.595      0.028     21.362      0.000
+
+Between Level
+
+ S          ON
+    AGEC70             0.158      0.083      1.891      0.059
+    FEMALE            -0.013      0.091     -0.142      0.887
+
+ YZ         ON
+    AGEC70             0.113      0.030      3.813      0.000
+    FEMALE             0.217      0.036      5.951      0.000
+
+ YZ       WITH
+    S                 -0.046      0.075     -0.609      0.543
+
+ Intercepts
+    YZ                -0.177      0.027     -6.598      0.000
+    S                  0.196      0.069      2.847      0.004
+
+ Residual Variances
+    YZ                 0.400      0.040      9.943      0.000
+    S                  0.328      0.220      1.493      0.135
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.230E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              YZ            TD
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              YZ            TD
+              ________      ________
+ YZ                 0             0
+ TD                 0             0
+
+
+           THETA
+              YZ            TD
+              ________      ________
+ YZ                 0
+ TD                 0             0
+
+
+           ALPHA
+              YZ            TD
+              ________      ________
+                    0             0
+
+
+           BETA
+              YZ            TD
+              ________      ________
+ YZ                 0             0
+ TD                 0             0
+
+
+           PSI
+              YZ            TD
+              ________      ________
+ YZ                 1
+ TD                 0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              YZ            FEMALE        AGEC70
+              ________      ________      ________
+                    0             0             0
+
+
+           LAMBDA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ YZ                 0             0             0             0
+ FEMALE             0             0             0             0
+ AGEC70             0             0             0             0
+
+
+           THETA
+              YZ            FEMALE        AGEC70
+              ________      ________      ________
+ YZ                 0
+ FEMALE             0             0
+ AGEC70             0             0             0
+
+
+           ALPHA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+                    2             3             0             0
+
+
+           BETA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ S                  0             0             4             5
+ YZ                 0             0             6             7
+ FEMALE             0             0             0             0
+ AGEC70             0             0             0             0
+
+
+           PSI
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ S                  8
+ YZ                 9            10
+ FEMALE             0             0             0
+ AGEC70             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              YZ            TD
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              YZ            TD
+              ________      ________
+ YZ             1.000         0.000
+ TD             0.000         1.000
+
+
+           THETA
+              YZ            TD
+              ________      ________
+ YZ             0.000
+ TD             0.000         0.000
+
+
+           ALPHA
+              YZ            TD
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              YZ            TD
+              ________      ________
+ YZ             0.000         0.000
+ TD             0.000         0.000
+
+
+           PSI
+              YZ            TD
+              ________      ________
+ YZ             0.511
+ TD             0.000         0.028
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              YZ            FEMALE        AGEC70
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           LAMBDA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ YZ             0.000         1.000         0.000         0.000
+ FEMALE         0.000         0.000         1.000         0.000
+ AGEC70         0.000         0.000         0.000         1.000
+
+
+           THETA
+              YZ            FEMALE        AGEC70
+              ________      ________      ________
+ YZ             0.000
+ FEMALE         0.000         0.000
+ AGEC70         0.000         0.000         0.000
+
+
+           ALPHA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+                0.000         0.028         0.000         0.000
+
+
+           BETA
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ S              0.000         0.000         0.000         0.000
+ YZ             0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000
+ AGEC70         0.000         0.000         0.000         0.000
+
+
+           PSI
+              S             YZ            FEMALE        AGEC70
+              ________      ________      ________      ________
+ S              1.000
+ YZ             0.000         0.511
+ FEMALE         0.000         0.000         0.120
+ AGEC70         0.000         0.000         0.000         0.192
+
+
+     Beginning Time:  12:55:14
+        Ending Time:  12:55:14
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

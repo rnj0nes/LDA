@@ -1,0 +1,15 @@
+TITLE:    MLM CESD score
+DATA:     FILE = cesd.dat ;
+VARIABLE: NAMES = id td yz female agec70; 
+          MISSING = . ;
+          WITHIN = td ;
+          BETWEEN = agec70 female ;
+          CLUSTER = id ;
+ANALYSIS: TYPE = TWOLEVEL RANDOM ;
+OUTPUT: TECH1;
+MODEL:    %WITHIN%
+            s | yz on td ; 
+          %BETWEEN%
+            yz on agec70 female ;
+            s on agec70 female ;
+            yz with s ;

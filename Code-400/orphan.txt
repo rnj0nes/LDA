@@ -1,0 +1,38 @@
+
+## Bottom Line Up Front
+
+::: {style="font-size:0.6em;"}
+The multiple indicator latent growth curve model (MILGCM) and multilevel growth of factors (MLGOF) models for categorical variables are equivalent, with some constraints (no item level residual covariances in LILGCM; equal residual variances for time-specific common factors in LIGCM).
+
+
+```{r}
+#| label: l41_process_output
+#| echo: false
+milgmResults <- MplusAutomation::readModels(target="model24.out")
+milgmParameters <-  milgmResults$parameters$unstandardized %>% mutate(PARAMETER = str_c(paramHeader,param, sep = " "))
+mlcofResults <- MplusAutomation::readModels(target="model25.out")
+mlcofParameters <-  mlcofResults$parameters$unstandardized %>% mutate(PARAMETER = str_c(paramHeader,param, sep = " "))
+# Elapsed time
+timePattern <- "\\d{2}:\\d{2}:\\d{2}"
+milgmElapsedTime <- regmatches(grep("Elapsed Time:", milgmResults$output, value = TRUE), regexpr(timePattern, grep("Elapsed Time:", milgmResults$output, value = TRUE)))
+mlcofElapsedTime <- regmatches(grep("Elapsed Time:", mlcofResults$output, value = TRUE), regexpr(timePattern, grep("Elapsed Time:", mlcofResults$output, value = TRUE)))
+
+```
+
+
+| **Parameter** | **MILGCM** | **MLCOF** | 
+|:--|--:|--:|
+|Number of free parameters | `r milgmResults$summaries$Parameters`                          | `r mlcofResults$summaries$Parameters`         |
+|Loglikelihood             | `r sprintf("%.3f", milgmResults$summaries$LL)`                 | `r sprintf("%.3f", mlcofResults$summaries$LL)` |
+|Correction factor         | `r sprintf("%.3f", milgmResults$summaries$LLCorrectionFactor)` | `r sprintf("%.3f", mlcofResults$summaries$LLCorrectionFactor)` |
+|I with S                  | `r milgmParameters$est[milgmParameters$PARAMETER == "I.WITH S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "I.WITH S"]`|
+|Intercept(I)              |@0|@0|
+|Intercept(S)              |`r milgmParameters$est[milgmParameters$PARAMETER == "Intercepts S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Intercepts S"]`|
+|ResVar(I)                 |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances I"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances I"]`|
+|ResVar(S)                 |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances S"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances S"]`|
+|ResVar(F0), ResVar(FW)    |`r milgmParameters$est[milgmParameters$PARAMETER == "Residual.Variances F0"]`|`r mlcofParameters$est[mlcofParameters$PARAMETER == "Residual.Variances FW"]`|
+|Elapsed Time              |`r milgmElapsedTime`|`r mlcofElapsedTime`|
+:::
+
+
+---
